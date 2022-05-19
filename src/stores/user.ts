@@ -1,8 +1,9 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { useStorage } from '@vueuse/core';
+import { IUser } from '../services/api';
 
-export type UserData = Record<string, any> | null;
+export type UserData = IUser | undefined;
 
 export const useUserSession = defineStore('userSession', () => {
     // token will be synced with local storage

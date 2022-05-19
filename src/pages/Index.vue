@@ -1,6 +1,6 @@
 <template>
     <div class="fixed-center">
-        <h1>Homepage</h1>
+        <h1>DirectAds</h1>
 
         <q-btn color="primary" @click="click('/login')">Sign-in</q-btn>
     </div>
