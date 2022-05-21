@@ -11,6 +11,8 @@ export const APIURL =
         ? 'http://localhost:3000/'
         : 'https://directads-api.herokuapp.com/';
 
+console.log('API_URL', APIURL);
+
 export const wId = '5e8ba11d3fb8ff95c90b7332';
 
 export const loading = ref(false);
