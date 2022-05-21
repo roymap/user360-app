@@ -1,0 +1,1 @@
+import{u as t}from"./use-quasar.8ab429a7.js";import{_ as o,d as r,a as n,e as s,f as _}from"./index.554559ed.js";const u=r({name:"BlankLayout",data(){return{dark:!1}},setup(){t().dark.set(!1)}});function c(e,p,f,l,d,i){const a=n("router-view");return s(),_(a)}var v=o(u,[["render",c]]);export{v as default};
