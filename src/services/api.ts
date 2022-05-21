@@ -6,10 +6,10 @@ import * as Gravatar from './gravatar';
 import { useUserSession } from '../stores/user';
 import { ref } from 'vue';
 
-export const APIURL = 'http://localhost:3000/';
-// ['localhost'].indexOf(window.location.hostname) > -1 || window.location.hostname.indexOf('ngrok.io') > -1
-// ? 'http://localhost:8000/'
-// : 'https://api.unified.to/';
+export const APIURL =
+    ['localhost'].indexOf(window.location.hostname) > -1 || window.location.hostname.indexOf('ngrok.io') > -1
+        ? 'http://localhost:3000/'
+        : 'https://directads-api.herokuapp.com/';
 
 export const wId = '5e8ba11d3fb8ff95c90b7332';
 
