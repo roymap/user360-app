@@ -1,5 +1,6 @@
 <template>
     <div class="fixed-center">
+        <img src="~assets/premium_online_ad_buying_process.png" />
         <h1>DirectAds</h1>
 
         <q-btn color="primary" @click="click('/login')">Sign-in</q-btn>

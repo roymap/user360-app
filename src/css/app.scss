@@ -1,1 +1,9 @@
 // app global css in SCSS form
+.body--dark .q-header, .body--dark .q-footer {
+    background-color: $dark;
+    color: #424242 !important;
+}
+
+.body--dark .text-grey-9 {
+    color: #ffffff !important;
+}

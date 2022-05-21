@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { IUser } from '../services/api';
 
@@ -10,22 +10,31 @@ export const useUserSession = defineStore('userSession', () => {
     // @see https://vueuse.org/core/usestorage/
     const token = useStorage('token', '');
 
-    const user = ref<Partial<UserData>>();
-    const loading = ref(true);
+    const user = useStorage('user', ''); // ref<Partial<UserData>>();
+    // const loading = ref(false);
+
+    let userObj: UserData;
+    try {
+        // console.log('user json', user.value);
+        userObj = JSON.parse(user.value);
+        // console.log('user obj', userObj);
+    } catch {}
 
     const isLoggedIn = computed(() => token.value !== undefined && token.value !== '');
 
     function setUser(newUser: Partial<UserData>) {
-        user.value = newUser;
+        userObj = newUser;
+        user.value = JSON.stringify(newUser);
     }
 
     function setToken(newToken: string) {
         token.value = newToken;
     }
 
-    function setLoading(newLoading: boolean) {
-        loading.value = newLoading;
-    }
+    // function setLoading(newLoading: boolean) {
+    //     console.log('setLoading', newLoading);
+    //     loading.value = newLoading;
+    // }
 
     async function logoutUser() {
         token.value = undefined;
@@ -33,14 +42,14 @@ export const useUserSession = defineStore('userSession', () => {
     }
 
     return {
-        user,
+        user: userObj,
         token,
         isLoggedIn,
-        loading,
+        // loading,
         logoutUser,
         setUser,
         setToken,
-        setLoading,
+        // setLoading,
     } as const;
 });
 

@@ -9,7 +9,7 @@ import { createHead } from '@vueuse/head';
 // for each client)
 
 export default boot(({ app }) => {
-    console.log('boot.head');
+    // console.log('boot.head');
 
     const head = createHead();
     app.use(head);

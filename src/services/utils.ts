@@ -48,3 +48,62 @@ export function date(v?: string | number | Date | undefined, format?: string) {
 
     return _date.formatDate(v, 'MMMM D, YYYY [at] H:mma');
 }
+
+export function number(value = 0) {
+    return new Intl.NumberFormat().format(value);
+}
+
+export function possesive(str: string) {
+    if (str.endsWith && str.endsWith('s')) {
+        return str + "'";
+    }
+    return str + "'s";
+}
+
+export function capitalize(str: string, all: boolean) {
+    const reg = all ? /([^\W_]+[^\s-]*) */g : /([^\W_]+[^\s-]*)/;
+    return str ? str.replace(reg, fn) : '';
+
+    function fn(txt: string) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+}
+
+export function telephone(str: string, sourceCountry: string) {
+    if (!str) {
+        return '';
+    }
+
+    sourceCountry = sourceCountry || 'US';
+
+    if (['US', 'CA'].indexOf(sourceCountry) !== -1 && str.length === 12 && str.substring(0, 2) === '+1') {
+        // US/Canada/Carribean
+        return '(' + str.substring(2, 5) + ') ' + str.substring(5, 8) + '-' + str.substring(8);
+    }
+
+    return str;
+}
+
+export function upper(value: string) {
+    if (!value) {
+        return '';
+    }
+    value = value.toString();
+    return value.toUpperCase();
+}
+
+export function firstName(name: string) {
+    if (!name) {
+        return '';
+    }
+    return name.split(' ')[0];
+}
+
+export function money(amount?: number | string, currency = '$') {
+    const options = {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+    };
+
+    return `${currency}${Number(amount || 0).toLocaleString('en', options)}`;
+}

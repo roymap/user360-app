@@ -38,8 +38,8 @@ export default route(function (/* { store, ssrContext } */) {
         history: createHistory(process.env.VUE_ROUTER_BASE),
     });
 
-    Router.beforeEach(async (to, from) => {
-        console.log(`route ${to.fullPath} from ${from.fullPath}`);
+    Router.beforeEach(async (to) => {
+        // console.log(`route ${to.fullPath} from ${from.fullPath}`);
         // instead of having to check every route record with
         // to.matched.some(record => record.meta.requiresAuth)
         if (!to.meta.noAuth) {

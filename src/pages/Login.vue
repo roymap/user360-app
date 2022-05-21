@@ -94,7 +94,7 @@
 
 import { defineComponent } from 'vue';
 import * as ApiService from '../services/api';
-import { IAuthMethod, wId } from '../services/api';
+import { IAuthMethod, IUser, wId } from '../services/api';
 
 import { useUserSession } from '../stores/user';
 
@@ -122,17 +122,18 @@ export default defineComponent({
         },
         async authorizing() {
             if (this.$route.query.jwt) {
-                const jwt = this.$route.query.jwt as string;
+                const jwt = this.$route.query.jwt;
                 // console.log('jwt', this.$route.query.jwt);
 
-                const result = await ApiService.get<{ token: string }>(`unified/jwtauth/${wId}?jwt=${jwt}`);
+                const result = await ApiService.get<IUser>('users/jwt', { jwt });
 
                 if (result && result.token) {
                     // console.log('user', token);
                     // Store.setUserName(token.name || '');
                     useUserSession().setToken(result.token);
                     // Store.setToken(result.token);
-                    await ApiService.getUser();
+                    await ApiService.getUserGravatar(result);
+                    useUserSession().setUser(result);
 
                     // console.log(Store.getSeed(), token.state);
                     // if (Number(this.$route.query.state || '0') === Store.getSeed()) {
@@ -155,7 +156,10 @@ export default defineComponent({
                 return;
             }
 
-            this.providers = (await ApiService.get<IAuthMethod[]>(`auth/${wId}?success_redirect=${window.location.href}`)) || [];
+            this.providers =
+                (await ApiService.rawGet<IAuthMethod[]>(
+                    `https://api.unified.to/auth/${wId}?success_redirect=${window.location.href}`
+                )) || [];
             this.providers = this.providers?.filter((p) => {
                 return ['google', 'twitter', 'microsoft'].indexOf(p.id) !== -1;
             });

@@ -1,5 +1,5 @@
 <template>
-    <q-page class="q-pa-md">
+    <q-page class="dashboard-page">
         <h1>
             Dashboard
             <q-icon size="xs" color="grey" name="help_outline">
@@ -9,16 +9,33 @@
                 </q-tooltip>
             </q-icon>
         </h1>
+
+        <div class="row q-gutter-md">
+            <div class="col">
+                <dashboard-stat
+                    title="Revenue"
+                    link="/app/orders"
+                    :stat="{ thisMonth: 14233.42, lastMonth: 14002, isMoney: true }"
+                />
+            </div>
+            <div class="col">
+                <dashboard-stat title="Orders" link="/app/orders" :stat="{ thisMonth: 1833, lastMonth: 3102 }" />
+            </div>
+            <div class="col">
+                <dashboard-stat title="Products" link="/app/products" :stat="{ thisMonth: 233, lastMonth: 230 }" />
+            </div>
+        </div>
     </q-page>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useHead } from '@vueuse/head';
+import DashboardStat from '../components/DashboardStat.vue';
 
 export default defineComponent({
     name: 'DashboardPage',
-    components: {},
+    components: { DashboardStat },
     setup() {
         useHead({
             title: 'DirectAds | Dashboard',
@@ -38,5 +55,10 @@ export default defineComponent({
 }
 .border {
     border: 1px solid #0000001f;
+}
+
+.dashboard-page .q-card .header {
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 </style>

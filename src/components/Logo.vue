@@ -1,5 +1,6 @@
 <template>
-    <svg
+    <img src="/logo.png" title="Direct Ads" />
+    <!-- <svg
         xmlns:mydata="http://www.w3.org/2000/svg"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +31,7 @@
                 </g>
             </g>
         </g>
-    </svg>
+    </svg> -->
 </template>
 
 <script lang="ts">

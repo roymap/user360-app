@@ -1,18 +1,27 @@
 <template>
     <q-layout view="hHh lpR lff">
-        <q-header bordered class="text-grey-9 bg-white">
+        <q-header bordered class="text-grey-9">
             <q-toolbar>
                 <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
                 <q-toolbar-title>
                     <q-avatar square>
                         <Logo />
-                        <!-- <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" /> -->
                     </q-avatar>
                     Direct Ads
                 </q-toolbar-title>
 
-                <q-btn dense flat color="white" class="q-ml-lg" :icon="user?.imageUrl ? undefined : 'user'">
+                <q-btn
+                    @click="toogleDarkMode"
+                    dense
+                    flat
+                    rounded
+                    color="grey-8"
+                    class="q-ml-lg"
+                    :icon="dark ? 'light_mode' : 'dark_mode'"
+                ></q-btn>
+
+                <q-btn dense flat round color="white" class="q-ml-lg" :icon="user?.imageUrl ? undefined : 'user'">
                     <q-avatar v-if="user && user.imageUrl" round>
                         <q-icon size="lg" name="spinner" v-if="saving" />
                         <img :src="user.imageUrl" :title="`${user.name} <${user.email}>`" v-if="!saving" />
@@ -46,7 +55,7 @@
             </q-toolbar>
         </q-header>
 
-        <q-drawer v-model="leftDrawerOpen" show-if-above bordered side="left" class="text-grey-9 bg-white mainmenu">
+        <q-drawer v-model="leftDrawerOpen" show-if-above bordered side="left" class="text-grey-9 mainmenu">
             <q-list padding class="text-grey-9">
                 <div v-for="menu in menus" :key="menu.label">
                     <q-item
@@ -79,7 +88,7 @@
                         active-class="active"
                     >
                         <q-item-section avatar>
-                            <q-icon :name="child.icon" />
+                            <q-icon :name="child.icon || 'arrow_right'" :size="!child.icon ? 'xs' : ''" />
                         </q-item-section>
 
                         <q-item-section>{{ child.label }}</q-item-section>
@@ -89,21 +98,25 @@
         </q-drawer>
 
         <q-page-container>
-            <router-view />
+            <router-view class="q-pa-lg bg-grey-2" />
         </q-page-container>
 
-        <q-footer bordered size="sm" class="text-grey-9 bg-white q-pl-md q-pt-md footer">
+        <q-footer bordered size="sm" class="text-grey-9 q-pl-md q-pt-md footer">
             <p class="ma-sm-md">
-                &copy; 2022 DirectAds.to - <a href="#">Help</a> - <a href="#">Release Notes</a> - <a href="#">Status</a>
+                &copy; 2022 DirectAds.to - <a href="/help">Help</a> - <a href="/changelog">Release Notes</a> -
+                <a href="/status">Status</a>
             </p>
         </q-footer>
     </q-layout>
 </template>
 
 <script lang="ts">
-import { useUserSession } from 'src/stores/user';
+import { useQuasar } from 'quasar';
 import { defineComponent, ref } from 'vue';
-import * as ApiService from '../services/api';
+
+import { useUserSession } from '../stores/user';
+import { useDarkmode } from '../stores/darkmode';
+// import * as ApiService from '../services/api';
 import { IMenuItem, ISubmenuItem, MENU } from '../../menu';
 import Logo from '../components/Logo.vue';
 
@@ -112,10 +125,30 @@ export default defineComponent({
 
     components: { Logo },
 
+    data() {
+        return {
+            dark: false,
+        };
+    },
+
     setup() {
+        const $q = useQuasar();
+
+        function toggleDark(val?: boolean) {
+            // console.log('toggleDark', val);
+            if (val === false) {
+                $q.dark.set(false);
+            } else if (val === true) {
+                $q.dark.set(true);
+            } else {
+                $q.dark.toggle();
+            }
+        }
+
         const leftDrawerOpen = ref(false);
 
         return {
+            toggleDark,
             saving: false,
             user: ref(useUserSession().user),
             selected: ref(''),
@@ -136,6 +169,11 @@ export default defineComponent({
         };
     },
     methods: {
+        toogleDarkMode() {
+            this.dark = !this.dark;
+            useDarkmode().isDark = this.dark;
+            this.toggleDark();
+        },
         async logout() {
             await useUserSession().logoutUser();
             this.$router.push({ path: '/' });
@@ -144,19 +182,19 @@ export default defineComponent({
             if (menu.children) {
                 return this.expanded === menu.label;
             } else {
-                return this.selected === menu.label;
+                return this.selected === menu.route;
             }
         },
         async setActive(menu: IMenuItem & ISubmenuItem) {
             if (menu.children) {
                 this.expanded = menu.label;
-                this.selected = menu.children[0].label;
+                this.selected = menu.children[0].route || menu.children[0].label;
 
                 if (menu.children?.length && menu.children[0].route) {
                     await this.$router.push({ path: menu.children[0].route });
                 }
             } else {
-                this.selected = menu.label;
+                this.selected = menu.route || menu.label;
                 this.expanded = menu.parent || '';
 
                 if (menu.route) {
@@ -166,21 +204,26 @@ export default defineComponent({
         },
     },
     async mounted() {
+        this.selected = this.$route.path;
+
         if (!useUserSession().token) {
             // console.warn('no token');
             await this.$router.push('/login');
             return;
         }
 
-        if (!useUserSession().user?.email) {
-            // console.log('no user.email');
-            const user = await ApiService.getUser();
-            if (user) {
-                this.user = user;
-            }
-        } else {
-            // console.log('found user', Store.getUser());
-        }
+        this.dark = useDarkmode().isDark;
+        this.toggleDark(this.dark);
+
+        // if (!useUserSession().user?.email) {
+        // console.log('no user.email');
+        // const user = await ApiService.getUser();
+        // if (user) {
+        // this.user = user;
+        // }
+        // } else {
+        // console.log('found user', Store.getUser());
+        // }
     },
 });
 </script>
@@ -189,11 +232,11 @@ export default defineComponent({
 .footer {
     font-size: 80%;
 }
-a {
+.footer a {
     color: #3367d6;
     text-decoration: none;
 }
-a:hover {
+.footer a:hover {
     color: #3367d6;
     cursor: pointer;
     text-decoration: underline;
@@ -207,6 +250,14 @@ a:hover {
     font-weight: bold;
     color: #1967d2;
 }
+.body--dark .bg-grey-2 {
+    background-color: #333333 !important;
+}
+.body--dark .q-item.active,
+.body--dark .q-item--active {
+    background-color: #666;
+    color: #fff !important;
+}
 .mainmenu .q-item--active {
     color: initial;
 }
@@ -214,5 +265,9 @@ a:hover {
     border-top-right-radius: 40px;
     border-bottom-right-radius: 40px;
     margin-right: 8px;
+}
+.q-header,
+.q-footer {
+    background-color: #ffffff;
 }
 </style>

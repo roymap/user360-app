@@ -17,30 +17,11 @@ const routes: RouteRecordRaw[] = [
         path: '/app',
         component: () => import('layouts/MainLayout.vue'),
         redirect: '/app/dashboard',
-        children: [],
-        // { path: 'dashboard', component: () => import('pages/Dashboard.vue') },
-        // { path: 'orders', component: () => import('pages/Orders.vue') },
-        // ],
+        children: [
+            { path: 'products/:id', component: () => import('pages/ProductEdit.vue') },
+            // { path: 'orders', component: () => import('pages/Orders.vue') },
+        ],
     },
-    // {
-    //     path: '/',
-    //     component: () => import('layouts/PublicLayout.vue'),
-    //     children: [{ path: '', component: () => import('pages/Index.vue') }],
-    //     meta: {
-    //         noAuth: true,
-    //     },
-    // },
-    // {
-    //     path: '/app',
-    //     component: () => import('layouts/AppLayout.vue'),
-    //     children: [
-    //         { path: '/dashboard', component: () => import('pages/Dashboard.vue') },
-    //         { path: '/orders', component: () => import('pages/Orders.vue') },
-    //     ],
-    // },
-
-    // Always leave this as last one,
-    // but you can also remove it
     {
         path: '/:catchAll(.*)*',
         component: () => import('pages/ErrorNotFound.vue'),
@@ -49,7 +30,7 @@ const routes: RouteRecordRaw[] = [
 
 MENU.forEach((menu) => {
     if (menu.page && menu.route) {
-        console.log('menu', menu.route);
+        // console.log('menu', menu.route);
         routes[1].children?.push({
             path: menu.route,
             component: () => menu.page,

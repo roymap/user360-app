@@ -26,8 +26,10 @@ export const initDarkmode = () => {
         const body = document.documentElement;
 
         if (darkmode.isDark) {
+            // console.log('adding dark mode into body');
             body.classList.add(DARK_MODE_BODY_CLASS);
         } else {
+            // console.log('removing dark mode from body');
             body.classList.remove(DARK_MODE_BODY_CLASS);
         }
     });
@@ -37,13 +39,25 @@ export const useDarkmode = defineStore('darkmode', () => {
     const preferredDark = usePreferredDark();
     const colorSchema = useStorage<DarkModeSchema>('color-schema', 'auto');
 
+    // console.log('preferredDark', preferredDark.value);
     const isDark = computed({
         get() {
+            // console.log(
+            // 'dark mode get',
+            // colorSchema.value,
+            // colorSchema.value === 'auto' ? preferredDark.value : colorSchema.value === 'dark'
+            // );
             return colorSchema.value === 'auto' ? preferredDark.value : colorSchema.value === 'dark';
         },
         set(v: boolean) {
-            if (v === preferredDark.value) colorSchema.value = 'auto';
-            else colorSchema.value = v ? 'dark' : 'light';
+            // console.log('prefDark', preferredDark.value);
+            if (v === preferredDark.value) {
+                colorSchema.value = 'auto';
+            } else {
+                colorSchema.value = v ? 'dark' : 'light';
+            }
+
+            // console.log('dark mode set to', colorSchema.value, v);
         },
     });
 
