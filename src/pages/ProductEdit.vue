@@ -90,7 +90,7 @@ export default defineComponent({
         },
 
         load() {
-            console.log(this.$route.params.id);
+            console.log('product-edit', this.$route.params.id);
 
             if (this.$route.params.id === 'new') {
                 this.product = {
@@ -107,7 +107,15 @@ export default defineComponent({
                 return this.$router.push('/app/products');
             }
 
-            this.product = this.products[Number(this.$route.params.id)];
+            const id: string = this.$route.params.id as string;
+
+            this.product = this.products.find((p) => p.id === id);
+            if (!this.product) {
+                this.$router.push('/app/products');
+                return;
+            }
+
+            console.log('product-edit-object', this.product);
 
             this.TAGS = [];
             this.products.forEach((p) => {
@@ -120,6 +128,7 @@ export default defineComponent({
         },
     },
     mounted() {
+        console.log('product-edit-mounted');
         this.load();
     },
 });
