@@ -1,4 +1,4 @@
-import { acceptHMRUpdate, defineStore } from 'pinia';
+import { defineStore } from 'pinia';
 import { computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { IUser } from '../services/api';
@@ -62,6 +62,6 @@ export const useUserSession = defineStore('userSession', () => {
  * @see https://pinia.esm.dev/cookbook/hot-module-replacement.html
  * @see https://vitejs.dev/guide/api-hmr.html
  */
-if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useUserSession, import.meta.hot));
-}
+// if (import.meta.hot) {
+// import.meta.hot.accept(acceptHMRUpdate(useUserSession, import.meta.hot));
+// }
