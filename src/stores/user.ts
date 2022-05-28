@@ -18,7 +18,9 @@ export const useUserSession = defineStore('userSession', () => {
         // console.log('user json', user.value);
         userObj = JSON.parse(user.value) as UserData;
         // console.log('user obj', userObj);
-    } catch {}
+    } catch {
+        // console.log('error');
+    }
 
     const isLoggedIn = computed(() => token.value !== undefined && token.value !== '');
 
