@@ -8,18 +8,10 @@
                     <q-avatar square>
                         <Logo />
                     </q-avatar>
-                    Direct Ads
+                    User360
                 </q-toolbar-title>
 
-                <q-btn
-                    @click="toogleDarkMode"
-                    dense
-                    flat
-                    rounded
-                    color="grey-8"
-                    class="q-ml-lg"
-                    :icon="dark ? 'light_mode' : 'dark_mode'"
-                ></q-btn>
+                <q-btn @click="toogleDarkMode" dense flat rounded color="grey-8" class="q-ml-lg" :icon="!dark ? 'light_mode' : 'dark_mode'"></q-btn>
 
                 <q-btn dense flat round color="white" class="q-ml-lg" :icon="user?.imageUrl ? undefined : 'user'">
                     <q-avatar v-if="user && user.imageUrl" round>
@@ -58,13 +50,7 @@
         <q-drawer v-model="leftDrawerOpen" show-if-above bordered side="left" class="text-grey-9 mainmenu">
             <q-list padding class="text-grey-9">
                 <div v-for="menu in menus" :key="menu.label">
-                    <q-item
-                        clickable
-                        v-ripple
-                        :active="isActive(menu)"
-                        :active-class="!menu.children ? 'active' : ''"
-                        @click="setActive(menu)"
-                    >
+                    <q-item clickable v-ripple :active="isActive(menu)" :active-class="!menu.children ? 'active' : ''" @click="setActive(menu)">
                         <q-item-section avatar v-if="menu.icon">
                             <q-icon :name="menu.icon" />
                         </q-item-section>
@@ -175,8 +161,8 @@ export default defineComponent({
             this.toggleDark();
         },
         async logout() {
-            await useUserSession().logoutUser();
-            this.$router.push({ path: '/' });
+            useUserSession().logoutUser();
+            await this.$router.push({ path: '/' });
         },
         isActive(menu: IMenuItem) {
             if (menu.children) {

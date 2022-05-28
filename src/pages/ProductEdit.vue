@@ -9,24 +9,9 @@
 
             <q-select :options="PricingModels" label="Pricing Model" v-model="product.pricingModel" />
 
-            <q-input
-                :rules="[(val) => val > 0 || 'Value must be greater than $0']"
-                prefix="$"
-                type="number"
-                v-model.number="product.price"
-                label="Price"
-            />
+            <q-input :rules="[(val) => val > 0 || 'Value must be greater than $0']" prefix="$" type="number" v-model.number="product.price" label="Price" />
 
-            <q-select
-                use-input
-                @new-value="createTag"
-                v-model="product.tags"
-                multiple
-                :options="TAGS"
-                use-chips
-                stack-label
-                label="Tags"
-            />
+            <q-select use-input @new-value="createTag" v-model="product.tags" multiple :options="TAGS" use-chips stack-label label="Tags" />
 
             <div class="q-mt-lg">
                 <q-btn @click="save" color="primary" :label="product.id ? 'Update' : 'Save'" />
@@ -76,20 +61,22 @@ export default defineComponent({
         async save() {
             if (this.product) {
                 await useProductStore().add(this.product);
-                this.$router.push('/app/products');
+                await this.$router.push('/app/products');
             }
         },
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         createTag(val: string, done: any) {
             // specific logic to eventually call done(...) -- or not
             if (this.TAGS.indexOf(val) === -1) {
                 this.TAGS.push(val);
             }
 
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             done(val, 'add-unique');
         },
 
-        load() {
+        async load() {
             console.log('product-edit', this.$route.params.id);
 
             if (this.$route.params.id === 'new') {
@@ -111,7 +98,7 @@ export default defineComponent({
 
             this.product = this.products.find((p) => p.id === id);
             if (!this.product) {
-                this.$router.push('/app/products');
+                await this.$router.push('/app/products');
                 return;
             }
 
@@ -127,9 +114,9 @@ export default defineComponent({
             });
         },
     },
-    mounted() {
+    async mounted() {
         console.log('product-edit-mounted');
-        this.load();
+        await this.load();
     },
 });
 </script>

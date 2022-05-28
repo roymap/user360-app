@@ -16,7 +16,7 @@ export const useUserSession = defineStore('userSession', () => {
     let userObj: UserData;
     try {
         // console.log('user json', user.value);
-        userObj = JSON.parse(user.value);
+        userObj = JSON.parse(user.value) as UserData;
         // console.log('user obj', userObj);
     } catch {}
 
@@ -36,7 +36,7 @@ export const useUserSession = defineStore('userSession', () => {
     //     loading.value = newLoading;
     // }
 
-    async function logoutUser() {
+    function logoutUser() {
         token.value = undefined;
         user.value = undefined;
     }

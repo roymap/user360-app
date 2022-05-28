@@ -116,17 +116,14 @@ export async function put<T>(method: string, data: any, params?: any) {
 
 function error(err: any) {
     console.error(
-        (err && err.response && err.response.data && err.response.data.error ? err.response.data.error : undefined) ||
-            err.error ||
-            'ERROR',
-        (err && err.response && err.response.data && err.response.data.message ? err.response.data.message : undefined) ||
-            err.message
+        (err && err.response && err.response.data && err.response.data.error ? err.response.data.error : undefined) || err.error || 'ERROR',
+        (err && err.response && err.response.data && err.response.data.message ? err.response.data.message : undefined) || err.message
     );
 }
 
 // const defaultG = 'https://www.gravatar.com/avatar/';
 
-export async function getUserGravatar(user: IUser) {
+export function getUserGravatar(user: IUser) {
     // const user = await get<IUser>('unified/user');
     // console.log('getUser', user);
     if (user && user.email) {

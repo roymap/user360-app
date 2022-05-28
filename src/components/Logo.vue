@@ -1,37 +1,5 @@
 <template>
-    <img src="/logo.png" title="Direct Ads" />
-    <!-- <svg
-        xmlns:mydata="http://www.w3.org/2000/svg"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="106 132 220 220"
-    >
-        <g
-            fill="#3367d6"
-            stroke-width="1"
-            stroke-linecap="butt"
-            stroke-linejoin="miter"
-            stroke-miterlimit="10"
-            stroke-dasharray=""
-            stroke-dashoffset="0"
-            style="mix-blend-mode: normal"
-        >
-            <g
-                data-paper-data='{"isGlobalGroup":true,"bounds":{"x":105.46423508228393,"y":132.7637076462247,"width":339.0715298354322,"height":204.4725847075506}}'
-            >
-                <g
-                    data-paper-data='{"fillRule":"evenodd","fillRuleOriginal":"evenodd","isIcon":true,"iconStyle":"standalone","selectedEffects":{"container":"","transformation":"","pattern":""},"bounds":{"x":105.46423508228393,"y":132.7637076462247,"width":178.91351161910677,"height":204.4725847075506},"iconType":"icon","rawIconId":"1348452","isDetailed":false,"suitableAsStandaloneIcon":true}'
-                    fill-rule="evenodd"
-                >
-                    <path
-                        d="M122.50447,193.76555v102.08805l-17.04023,-9.73545v-102.23629l89.44909,-51.11815l89.46442,51.11815v102.23629l-89.46442,51.11815l-55.36862,-31.6498v-101.92958l55.36862,-31.63958l55.38651,31.63958v62.67596l-55.38651,31.6498l-21.29071,-12.17123v-62.37436l21.29071,-12.17379l17.17314,9.80957l-21.42362,12.24791v42.60697l4.25047,2.42811l38.34628,-21.90668v-42.90857l-38.34628,-21.90413l-38.33094,21.90413v82.1622l38.33094,21.90668l72.42675,-41.3827v-82.46124l-72.42675,-41.37503z"
-                        data-paper-data='{"isPathIcon":true}'
-                    ></path>
-                </g>
-            </g>
-        </g>
-    </svg> -->
+    <img src="/user360_square_logo.png" title="User360" />
 </template>
 
 <script lang="ts">

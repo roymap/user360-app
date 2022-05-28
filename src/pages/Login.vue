@@ -18,36 +18,21 @@
                             <q-item-label> If this is your first time, then a new account will be created </q-item-label>
 
                             <q-item-label class="q-pt-lg">
-                                <q-btn
-                                    ripple
-                                    class="text-grey-9 q-mr-md"
-                                    color="white"
-                                    @click="click(`${authUrl}auth/${googleId}/login${authPostUrl}`)"
-                                >
+                                <q-btn ripple class="text-grey-9 q-mr-md" color="white" @click="click(`${authUrl}auth/${googleId}/login${authPostUrl}`)">
                                     <q-avatar square size="32px" class="q-mr-md">
                                         <img src="~assets/google.png" />
                                     </q-avatar>
                                     Google
                                 </q-btn>
 
-                                <q-btn
-                                    class="text-grey-9 q-mr-md"
-                                    color="white"
-                                    ripple
-                                    @click="click(`${authUrl}auth/${microsoftId}/login${authPostUrl}`)"
-                                >
+                                <q-btn class="text-grey-9 q-mr-md" color="white" ripple @click="click(`${authUrl}auth/${microsoftId}/login${authPostUrl}`)">
                                     <q-avatar square size="32px" class="q-mr-md">
                                         <img src="~assets/microsoft-logo-icon.png" />
                                     </q-avatar>
                                     Microsoft
                                 </q-btn>
 
-                                <q-btn
-                                    class="text-grey-9 q-mr-md"
-                                    color="white"
-                                    ripple
-                                    @click="click(`${authUrl}auth/${twitterId}/login${authPostUrl}`)"
-                                >
+                                <q-btn class="text-grey-9 q-mr-md" color="white" ripple @click="click(`${authUrl}auth/${twitterId}/login${authPostUrl}`)">
                                     <q-avatar square size="32px" class="q-mr-md">
                                         <img src="~assets/twitter.png" />
                                     </q-avatar>
@@ -125,14 +110,16 @@ export default defineComponent({
                 const jwt = this.$route.query.jwt;
                 // console.log('jwt', this.$route.query.jwt);
 
-                const result = await ApiService.get<IUser>('users/jwt', { jwt });
+                const result = await ApiService.get<IUser>('users/jwt', {
+                    jwt,
+                });
 
                 if (result && result.token) {
                     // console.log('user', token);
                     // Store.setUserName(token.name || '');
                     useUserSession().setToken(result.token);
                     // Store.setToken(result.token);
-                    await ApiService.getUserGravatar(result);
+                    ApiService.getUserGravatar(result);
                     useUserSession().setUser(result);
 
                     // console.log(Store.getSeed(), token.state);
@@ -156,10 +143,7 @@ export default defineComponent({
                 return;
             }
 
-            this.providers =
-                (await ApiService.rawGet<IAuthMethod[]>(
-                    `https://api.unified.to/auth/${wId}?success_redirect=${window.location.href}`
-                )) || [];
+            this.providers = (await ApiService.rawGet<IAuthMethod[]>(`https://api.unified.to/auth/${wId}?success_redirect=${window.location.href}`)) || [];
             this.providers = this.providers?.filter((p) => {
                 return ['google', 'twitter', 'microsoft'].indexOf(p.id) !== -1;
             });

@@ -4,8 +4,7 @@
             Products
             <q-icon size="xs" color="grey" name="help_outline">
                 <q-tooltip class="border bg-grey-1 text-grey-10">
-                    An "ad product" is what you are selling to a buyer. It is a combination of pricing, targeting, and other
-                    options.
+                    An "ad product" is what you are selling to a buyer. It is a combination of pricing, targeting, and other options.
                 </q-tooltip>
             </q-icon>
         </h1>
@@ -13,7 +12,7 @@
         <q-table
             row-key="id"
             style="height: 400px"
-            :columns="columns"
+            :columns="(columns as any[])"
             :rows="filterTable(products)"
             virtual-scroll
             v-model:pagination="pagination"
@@ -42,28 +41,13 @@
                 <div class="q-gutter-md">
                     <q-btn v-if="selected.length === 1" color="primary" label="Edit" :to="`/app/products/${selected[0].id}`" />
 
-                    <q-btn
-                        v-if="selected.length && hasArchived()"
-                        color="primary"
-                        :label="`Unarchive${selected.length > 1 ? ' All' : ''}`"
-                    />
-                    <q-btn
-                        v-if="selected.length && hasActive()"
-                        color="primary"
-                        :label="`Archive${selected.length > 1 ? ' All' : ''}`"
-                    />
+                    <q-btn v-if="selected.length && hasArchived()" color="primary" :label="`Unarchive${selected.length > 1 ? ' All' : ''}`" />
+                    <q-btn v-if="selected.length && hasActive()" color="primary" :label="`Archive${selected.length > 1 ? ' All' : ''}`" />
                 </div>
 
                 <q-space />
 
-                <q-btn
-                    flat
-                    round
-                    dense
-                    :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-                    @click="props.toggleFullscreen"
-                    class="q-mr-xl"
-                />
+                <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" class="q-mr-xl" />
 
                 <q-option-group
                     v-model="archivedFilter"
@@ -97,8 +81,18 @@ import { useProductStore } from '../stores/products';
 // import { useUserSession } from '../stores/user';
 import { loading } from '../services/api';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const columns: any = [
+interface IColumn {
+    name: string;
+    required?: boolean;
+    label: string;
+    align?: 'left' | 'right';
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    field: string | Function;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    format?: Function; // (val: IProduct) => `<a to="/app/products/${val.id}>${val.name}</a>`,
+    sortable?: boolean;
+}
+const columns: IColumn[] = [
     {
         name: 'name',
         required: true,
@@ -129,13 +123,13 @@ const columns: any = [
     {
         name: 'tags',
         label: 'Tags',
-        aligh: 'left',
+        align: 'left',
         field: 'tags',
     },
     {
         name: 'status',
         label: 'Status',
-        aligh: 'left',
+        align: 'left',
         sortable: true,
         field: 'archived',
         format: (val: boolean) => (val ? 'Archived' : 'Active'),
@@ -171,11 +165,7 @@ export default defineComponent({
                 if (this.archivedFilter === 'archived' && !row.archived) {
                     return false;
                 }
-                return (
-                    row.name.toLowerCase().includes(terms) ||
-                    String(row.price).includes(terms) ||
-                    row.pricingModel.includes(terms)
-                );
+                return row.name.toLowerCase().includes(terms) || String(row.price).includes(terms) || row.pricingModel.includes(terms);
             });
         },
         archived(val?: boolean) {
@@ -201,8 +191,8 @@ export default defineComponent({
             }),
         };
     },
-    mounted() {
-        useProductStore().fetch();
+    async mounted() {
+        await useProductStore().fetch();
     },
 });
 </script>
