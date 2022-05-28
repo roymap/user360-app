@@ -1,9 +1,9 @@
 {
-    "name": "directads.pubapp",
+    "name": "user360.app",
     "version": "0.0.1",
-    "description": "Modern Self-Serve Advertising for Publishers",
-    "productName": "DirectAds",
-    "author": "Roy Pereira <roymap67@gmail.com>",
+    "description": "Complete 360 view of your customers",
+    "productName": "User360",
+    "author": "hello@unified.to",
     "private": true,
     "scripts": {
         "build": "quasar build",
